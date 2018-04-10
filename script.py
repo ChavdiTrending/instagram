@@ -160,7 +160,7 @@ class HashTagSearch(metaclass=ABCMeta):
         return InstagramPost(
             post_id=node['id'],
             code=node['shortcode'],
-            user=InstagramUser(user_id=node['owner']['id']),
+            #user=InstagramUser(user_id=node['owner']['id']),
             caption=node['edge_media_to_caption']['edges'][0]['node']['text'] if 'caption' in node else None,
             display_src=node['display_url'],
             is_video=node['is_video'],
@@ -207,8 +207,17 @@ class HashTagSearch(metaclass=ABCMeta):
 
     @abstractmethod
     def save_results(self, instagram_results):
+        dicto = {}
+        count = 0
         for i in instagram_results:
             pprint(vars(i))
+            dicto[count] = vars(i)
+            count+=1
+        #print(dicto)
+        jsonDict = {}
+        jsonDict['links'] = dicto
+        with open('instalinks.json', 'w') as outfile:
+            json.dump(jsonDict, outfile)
         """
         Implement yourself to work out what to do with each extract batch of posts
         :param instagram_results: A list of Instagram Posts
